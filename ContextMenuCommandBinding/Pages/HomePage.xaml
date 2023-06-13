@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ContextMenuCommandBinding.Models"
+             xmlns:viewmodels="clr-namespace:ContextMenuCommandBinding.ViewModels"
+             xmlns:selectors="clr-namespace:ContextMenuCommandBinding.Templates.Selectors"
+             xmlns:datatemplates="clr-namespace:ContextMenuCommandBinding.Templates.DataTemplates"
+             x:Class="ContextMenuCommandBinding.Pages.HomePage"
+             x:DataType="viewmodels:HomePageViewModel">
+    <ContentPage.Content>
+        <VerticalStackLayout>
+            <Label TextColor="White"
+                   HorizontalOptions="Center"
+                   Text="{Binding ExampleText}"
+                   FontSize="35"
+                   Margin="40"/>
+            <HorizontalStackLayout Spacing="60" Margin="40">
+            
+                <!--THESE WORK-->
+                <VerticalStackLayout>
+                    <Label Text="IN-PAGE CollectionView and DataTemplate through click events"
+                           TextColor="White"
+                           LineBreakMode="WordWrap"
+                           FontSize="12"
+                           Margin="15"
+                           HorizontalTextAlignment="Center"
+                           WidthRequest="200"
+                           HeightRequest="80"/>
+                    
+                    <Label Text="BUTTON: WORKING"
+                           TextColor="Green"
+                           FontSize="12"
+                           Margin="1"
+                           HorizontalTextAlignment="Center"
+                           />
+                    <Label Text="CONTEXT: WORKING"
+                           TextColor="Green"
+                           FontSize="12"
+                           Margin="1"
+                           HorizontalTextAlignment="Center"
+                           />
+                    <CollectionView ItemsSource="{Binding ExampleBoxes}"
+                                    >
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="{x:Type models:ExampleBox}">
+                                <VerticalStackLayout HeightRequest="80" WidthRequest="200" BackgroundColor="Yellow">
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="YELLOW BUTTON"
+                                                            Clicked="ExampleBoxClicked"
+                                                            CommandParameter="{Binding}"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+                                    <Button 
+                                        Text="{Binding BoxName}"
+                                        TextColor="Black"
+                                        BackgroundColor="Gray"
+                                        VerticalOptions="Center" 
+                                        HorizontalOptions="Center"
+                                        Pressed="ExampleBoxPressed"
+                                        CommandParameter="{Binding}"
+                                        HeightRequest="80"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            
+                <!--THESE DO NOT-->
+
+                <!--CONNECTS TO CONTENT PAGE VIEW MODEL:  HomePageViewModel-->
+                <VerticalStackLayout>
+                    <Label Text="IN-PAGE CollectionView and DataTemplate through RelayCommands from HomePageViewModel"
+                           TextColor="White"
+                           LineBreakMode="WordWrap"
+                           FontSize="12"
+                           Margin="15"
+                           HorizontalTextAlignment="Center"
+                           WidthRequest="200"
+                           HeightRequest="80"/>
+                    <Label Text="BUTTON: WORKING"
+                           TextColor="Green"
+                           FontSize="12"
+                           Margin="1"
+                           HorizontalTextAlignment="Center"
+                           />
+                    <Label Text="CONTEXT: FAILING"
+                           TextColor="Red"
+                           FontSize="12"
+                           Margin="1"
+                           HorizontalTextAlignment="Center"
+                           />
+                    <CollectionView ItemsSource="{Binding ExampleBoxes}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ExampleBox">
+                                <VerticalStackLayout HeightRequest="80" WidthRequest="200" BackgroundColor="Yellow">
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="YELLOW BUTTON"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExampleBoxClickedCommand}"
+                                                            CommandParameter="{Binding .}"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+                                    <Button 
+                                        Text="{Binding BoxName}"
+                                        TextColor="Black"
+                                        BackgroundColor="Gray"
+                                        VerticalOptions="Center" 
+                                        HorizontalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExampleBoxClickedCommand}"
+                                        CommandParameter="{Binding .}"
+                                        HeightRequest="80"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <!--CONNECTS TO CONTENT PAGE VIEW MODEL:  AppShellViewModel-->
+                <VerticalStackLayout>
+                    <Label Text="IN-PAGE CollectionView and DataTemplate through RelayCommands from AppShellViewModel"
+                           TextColor="White"
+                           LineBreakMode="WordWrap"
+                           FontSize="12"
+                           Margin="15"
+                           HorizontalTextAlignment="Center"
+                           WidthRequest="200"
+                           HeightRequest="80"/>
+                    <Label Text="BUTTON: WORKING"
+                            TextColor="Green"
+                            FontSize="10"
+                            Margin="1"
+                            HorizontalTextAlignment="Center"
+                        />
+                    <Label Text="CONTEXT: FAILING"
+                            TextColor="Red"
+                            FontSize="12"
+                            Margin="1"
+                            HorizontalTextAlignment="Center"
+                        />
+                    <CollectionView ItemsSource="{Binding ExampleBoxes}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:ExampleBox">
+                                <VerticalStackLayout HeightRequest="80" WidthRequest="200" BackgroundColor="Yellow">
+                                    <FlyoutBase.ContextFlyout>
+                                        <MenuFlyout>
+                                            <MenuFlyoutItem Text="YELLOW BUTTON"
+                                                            Command="{Binding Source={RelativeSource AncestorType={x:Type Shell}}, Path=BindingContext.ExampleBoxClickedCommand}"
+                                                            CommandParameter="{Binding .}"/>
+                                        </MenuFlyout>
+                                    </FlyoutBase.ContextFlyout>
+                                    <Button 
+                                        Text="{Binding BoxName}"
+                                        TextColor="Black"
+                                        BackgroundColor="Gray"
+                                        VerticalOptions="Center" 
+                                        HorizontalOptions="Center"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type Shell}}, Path=BindingContext.ExampleBoxClickedCommand}"
+                                        CommandParameter="{Binding .}"
+                                        HeightRequest="80"/>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label Text="Selector CollectionView and DataTemplate through RelayCommands from AppShellViewModel"
+                           TextColor="White"
+                           LineBreakMode="WordWrap"
+                           FontSize="12"
+                           Margin="15"
+                           HorizontalTextAlignment="Center"
+                           WidthRequest="200"
+                           HeightRequest="80"/>
+                    <Label Text="BUTTON: WORKING"
+                            TextColor="Green"
+                            FontSize="12"
+                            Margin="1"
+                            HorizontalTextAlignment="Center"
+                    />
+                    <Label Text="CONTEXT: FAILING"
+                            TextColor="Red"
+                            FontSize="12"
+                            Margin="1"
+                            HorizontalTextAlignment="Center"
+                    />
+                    <CollectionView ItemsSource="{Binding ExampleBoxes}"
+                                    ItemTemplate="{DynamicResource BoxSelector}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout>
+                    <Label Text="Selector CollectionView and DataTemplate through RelayCommands from HomePageViewModel"
+                           TextColor="White"
+                           LineBreakMode="WordWrap"
+                           FontSize="12"
+                           Margin="15"
+                           HorizontalTextAlignment="Center"
+                           WidthRequest="200"
+                           HeightRequest="80"/>
+                    <Label Text="BUTTON: WORKING"
+                           TextColor="Green"
+                           FontSize="12"
+                           Margin="1"
+                           HorizontalTextAlignment="Center"
+                           />
+                    <Label Text="CONTEXT: FAILING"
+                           TextColor="Red"
+                           FontSize="12"
+                           Margin="1"
+                           HorizontalTextAlignment="Center"
+                           />
+                    <CollectionView ItemsSource="{Binding ExampleBoxes}"
+                                    ItemTemplate="{DynamicResource BoxSelectorTwo}"/>
+                </VerticalStackLayout>
+
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ContentPage.Content>
+    <ContentPage.Resources>
+        <selectors:ContextMenuCommandBindingSelector x:Key="BoxSelector"
+                                                     YellowTemplate="{datatemplates:YellowExampleBox}"
+                                                     OtherTemplate="{datatemplates:OtherExampleBox}"/>
+        <selectors:ContextMenuCommandBindingSelector x:Key="BoxSelectorTwo"
+                                                     YellowTemplate="{datatemplates:YellowExampleBoxTwo}"
+                                                     OtherTemplate="{datatemplates:OtherExampleBoxTwo}"/>
+    </ContentPage.Resources>
+</ContentPage>

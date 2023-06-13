@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<DataTemplate xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:models="clr-namespace:ContextMenuCommandBinding.Models"
+              x:Class="ContextMenuCommandBinding.Templates.DataTemplates.OtherExampleBoxTwo"
+              x:DataType="models:ExampleBox">
+    <VerticalStackLayout HeightRequest="100" WidthRequest="100" BackgroundColor="Blue">
+        <FlyoutBase.ContextFlyout>
+            <MenuFlyout>
+                <MenuFlyoutItem Text="OTHER BUTTON"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExampleBoxClickedCommand}"
+                                CommandParameter="{Binding .}"/>
+            </MenuFlyout>
+        </FlyoutBase.ContextFlyout>
+        <Button Text="{Binding BoxName}"
+                TextColor="Black"
+                BackgroundColor="Gray"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ExampleBoxClickedCommand}"
+                CommandParameter="{Binding .}"
+                HeightRequest="80"/>
+    </VerticalStackLayout>
+</DataTemplate>
